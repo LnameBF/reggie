@@ -26,4 +26,23 @@ public class DishController {
         dishService.saveWithFlavor(dishvo);
         return R.success("新增菜品成功");
     }
+
+    /**
+     * 修改信息时进行页面数据回显
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    public R updateDish(@PathVariable Long id) {
+        return dishService.updateDish(id);
+    }
+
+    @PutMapping
+    public String saveDish(@RequestBody Dishvo dishvo){
+        dishService.saveDish(dishvo);
+        return "修改成功";
+
+    }
+
+
 }

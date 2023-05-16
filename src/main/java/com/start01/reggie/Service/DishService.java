@@ -16,4 +16,9 @@ public interface DishService extends IService<Dish> {
 
     //需要操作两张表，一张是dish，一张是dishflavor
     public void saveWithFlavor(Dishvo dishVo);
+
+
+    R  updateDish(Long id);
+
+    R saveDish(Dishvo dishvo);
 }
