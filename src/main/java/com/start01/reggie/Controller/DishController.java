@@ -29,6 +29,7 @@ public class DishController {
 
     /**
      * 修改信息时进行页面数据回显
+     * 根据id查询对应的菜品信息和口味信息
      * @param id
      * @return
      */
@@ -38,9 +39,9 @@ public class DishController {
     }
 
     @PutMapping
-    public String saveDish(@RequestBody Dishvo dishvo){
-        dishService.saveDish(dishvo);
-        return "修改成功";
+    public R saveDish(@RequestBody Dishvo dishvo){
+        dishService.updateWithFlavor(dishvo);
+        return R.success("修改成功");
 
     }
 

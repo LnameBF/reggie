@@ -63,7 +63,7 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
     }
 
     /**
-     * 调整菜品信息
+     * 修改时数据回显菜品信息
      * @return
      */
     @Override
@@ -87,20 +87,22 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
      * @return
      */
     @Override
-    public R saveDish(Dishvo dishvo) {
+    public R updateWithFlavor(Dishvo dishvo) {
         //根据id修改菜品的基本信息
         boolean dish = dishService.updateById(dishvo);
 
-        //修改口味数据
-        LambdaQueryWrapper<DishFlavor> wrapper=new LambdaQueryWrapper<>();
-        //设置修改口味的条件
-        wrapper.eq(DishFlavor::getDishId,dishvo.getId());
-        boolean dishFlavor = dishFlavorService.update(wrapper);
+        //删除掉当前菜品对应的口味信息  直接removeById，是根据口味表中id删除，而这里删除是要根据口味表中的dish_id删除
+        //delete from dish_flavor where dish_id=???
+        LambdaQueryWrapper<DishFlavor> flavorweapper=new LambdaQueryWrapper<>();
+        flavorweapper.eq(DishFlavor::getDishId,dishvo.getId());
+        dishFlavorService.remove(flavorweapper);
 
-        System.out.println("hhhhhhh");
-        if(dish||dishFlavor){
-            return R.success("修改成功");
-        }
-        return R.success("修改失败");
+        //增加修改后对应菜品的口味信息
+        List<DishFlavor> collect = dishvo.getFlavors().stream().map(flavor -> {
+            flavor.setDishId(dishvo.getId());
+            return flavor;
+        }).collect(Collectors.toList());
+        dishFlavorService.saveBatch(collect);
+        return R.success("修改成功");
     }
 }

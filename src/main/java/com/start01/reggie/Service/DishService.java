@@ -20,5 +20,6 @@ public interface DishService extends IService<Dish> {
 
     R  updateDish(Long id);
 
-    R saveDish(Dishvo dishvo);
+    //更新菜品信息和口味信息
+    R updateWithFlavor(Dishvo dishvo);
 }
